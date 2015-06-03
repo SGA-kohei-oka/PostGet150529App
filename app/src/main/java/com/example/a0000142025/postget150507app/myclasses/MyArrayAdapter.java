@@ -1,8 +1,4 @@
-package com.example.a0000142025.postget150507app;
-
-/**
- * Created by 0000142025 on 2015/05/13.
- */
+package com.example.a0000142025.postget150507app.myclasses;
 
 import java.util.List;
 import android.content.Context;
@@ -13,23 +9,33 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ArrayAdapter;
 
+/**
+ * Created by 0000142025 on 2015/05/13.
+ */
 
 
-public class MyArrayAdapter extends ArrayAdapter<Bitmap>{
+public class MyArrayAdapter extends ArrayAdapter<Bitmap> {
 
-    private int _resourceId;
+    private int resourceId;
 
+    /**
+     * Adapterを初期化するコンストラクタ.
+     * @param context Context
+     * @param resource 対象のView
+     * @param objects 画像データの配列
+     */
     public MyArrayAdapter(Context context, int resource, List<Bitmap> objects) {
         super(context, resource, objects);
-        _resourceId = resource;
+        resourceId = resource;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(_resourceId, null);
+            LayoutInflater inflater = (LayoutInflater) getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(resourceId, null);
         }
 
         ImageView view = (ImageView) convertView;

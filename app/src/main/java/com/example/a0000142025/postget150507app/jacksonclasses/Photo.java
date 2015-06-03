@@ -1,18 +1,17 @@
-package com.example.a0000142025.postget150507app;
+package com.example.a0000142025.postget150507app.jacksonclasses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.List;
 
 /**
  * Created by 0000142025 on 2015/05/15.
  */
-@JsonIgnoreProperties(ignoreUnknown=true)   //使わないパラメータは無視
+@JsonIgnoreProperties(ignoreUnknown = true)   //使わないパラメータは無視
 public class Photo {
 
-    public String id;
-    public String secret;
-    public String server;
-    public int farm;
+    private String id;
+    private String secret;
+    private String server;
+    private int farm;
 
 //    String owner;
 //    String title;
@@ -21,9 +20,13 @@ public class Photo {
 //    int isfamily;
 
 
-
-    public String getURL(){
-        String photourl = "http://farm" + String.valueOf(farm) + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg";
+    /**
+     * Photoオブジェクトの内容から画像のURLを取得.
+     * @return 画像のURL
+     */
+    public String getURL() {
+        String photourl = "http://farm" + String.valueOf(farm) + ".staticflickr.com/"
+                + server + "/" + id + "_" + secret + ".jpg";
         return photourl;
     }
 

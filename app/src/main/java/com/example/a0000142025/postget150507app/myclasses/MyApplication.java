@@ -1,4 +1,5 @@
-package com.example.a0000142025.postget150507app;
+
+package com.example.a0000142025.postget150507app.myclasses;
 
 import android.app.Application;
 import android.graphics.Bitmap;
@@ -9,31 +10,42 @@ import android.util.Log;
  */
 
 
-public class MyApplication extends Application{
-    private final String TAG = "APPLICATION";
+public class MyApplication extends Application {
+    private final String tag = "APPLICATION";
     private Bitmap obj;
 
     @Override
     public void onCreate() {
         //Application作成時
-        Log.v(TAG,"--- onCreate() in ---");
+        Log.v(tag, "--- onCreate() in ---");
     }
 
     @Override
     public void onTerminate() {
         //Application終了時
-        Log.v(TAG,"--- onTerminate() in ---");
+        Log.v(tag, "--- onTerminate() in ---");
     }
 
-    public void setObj(Bitmap bmp){
+    /**
+     * 押下した画像を保存.
+     * @param bmp 押下した画像データ
+     * */
+    public void setObj(Bitmap bmp) {
         obj = bmp;
     }
 
-    public Bitmap getObj(){
+    /**
+     * 保存している画像を呼び出す.
+     * @return 保存している画像データ
+     */
+    public Bitmap getObj() {
         return obj;
     }
 
-    public void clearObj(){
+    /**
+     * 保存している画像データを消去.
+     */
+    public void clearObj() {
         obj = null;
     }
 }

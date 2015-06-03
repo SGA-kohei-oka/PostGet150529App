@@ -1,31 +1,25 @@
-package com.example.a0000142025.postget150507app;
+package com.example.a0000142025.postget150507app.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.IOException;
-import java.io.InputStream;
+import com.example.a0000142025.postget150507app.myclasses.MyApplication;
+import com.example.a0000142025.postget150507app.myclasses.MyAsyncTask;
+import com.example.a0000142025.postget150507app.R;
 
 
+
+/**
+ * 画像を表示するアクティビティ.
+ * */
 public class ImageActivity extends Activity {
 
 
-    Bitmap _displayImage;
+    private Bitmap displayImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,54 +30,40 @@ public class ImageActivity extends Activity {
 
         //別スレッドで非同期処理
         MyAsyncTask asynctask = new MyAsyncTask(ia);
-        asynctask.execute("image","hoge","foo");
+        asynctask.execute("image", "hoge", "foo");
 
     }
 
-    //別スレッドでの処理
-    public String methods(){
-        String result = "empty";
+    /**
+     * 保存している画像を呼び出す.
+     * */
+    public void setBitmap() {
 
-        //URLを受け取るとき
+        //①URLを受け取るとき
 //        Intent intent = getIntent();
 //        String photourl = intent.getStringExtra("urlstring");
-//        _displayImage = getBitmap(photourl);
-//        result = photourl;
+//        displayImage = getBitmap(photourl);
+//        String result = photourl;
 
-        //画像を受け取るとき
-//        MySerializable serializable = (MySerializable)getIntent().getSerializableExtra("serializablestring");
-//        _displayImage = serializable._serializableBitmap;
+        //②画像を受け取るとき
+//        MySerializable serializable = (MySerializable)getIntent()
+//              .getSerializableExtra("serializablestring");
+//        displayImage = serializable.serializableBitmap;
 
         //③Applicationクラスを経由して画像を受け取るとき
-        MyApplication app = (MyApplication)getApplication();
-        _displayImage = app.getObj();
-
-        return result;
+        MyApplication app = (MyApplication) getApplication();
+        displayImage = app.getObj();
     }
 
 
-    ////該当画像のGet処理
-    public Bitmap getBitmap(String photourl){
-        Bitmap bitmap = null;
-        try {
-            HttpGet getpic = new HttpGet(photourl);
-            HttpClient client = new DefaultHttpClient();
-            HttpResponse response = client.execute(getpic);
-            InputStream in = response.getEntity().getContent();
-            bitmap = BitmapFactory.decodeStream(in);
 
-        } catch (IOException e) {
-            Log.e("TAG", "getResource：" + e.toString());
-        }
-        return bitmap;
-    }
-
-
-    //画像取得後の処理
-    public void result_job(String result){
+    /**
+     * 画像を表示する.
+     * */
+    public void resultJob() {
         //画像表示
-        ImageView iv = (ImageView)findViewById(R.id.imageView10);
-        iv.setImageBitmap(_displayImage);
+        ImageView iv = (ImageView) findViewById(R.id.imageView10);
+        iv.setImageBitmap(displayImage);
     }
 
 
