@@ -17,11 +17,10 @@ public class Photos {
 
     /**
      * Photoオブジェクトの配列を取得する処理.
-     * @return Photoオブジェクトの配列
+     * @return PhotoオブジェクトのList
      */
-    public  List<Photo> getPhoto() {
-        List<Photo> hoge = photo;
-        return hoge;
+    public  List<Photo> getPhotoList() {
+        return photo;
     }
 
 }

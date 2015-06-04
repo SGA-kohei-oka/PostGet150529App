@@ -2,6 +2,7 @@ package com.example.a0000142025.postget150507app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,12 +39,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.IOException;
+import java.util.List;
+
 import android.widget.GridView;
 
 
 import android.widget.AdapterView.OnItemClickListener;
 
 
+import com.example.a0000142025.postget150507app.jacksonclasses.Photo;
 import com.example.a0000142025.postget150507app.myclasses.MyApplication;
 import com.example.a0000142025.postget150507app.myclasses.MyArrayAdapter;
 import com.example.a0000142025.postget150507app.myclasses.MyAsyncTask;
@@ -56,8 +60,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class MainActivity extends Activity {
 
-    private static final int MAX_PHOTO = 100;
-    private Bitmap[] bitmaps = new Bitmap[MAX_PHOTO];
+    private static final String TAG = "PostGetApp";
+    private ArrayList<Bitmap> bitmapList = new ArrayList<Bitmap>();
     private MyArrayAdapter adapter;
 
 
@@ -80,25 +84,25 @@ public class MainActivity extends Activity {
                 // クリック時の処理
                 //別スレッドで非同期処理
                 MyAsyncTask asynctask = new MyAsyncTask(main);
-                asynctask.execute("get", "hoge", "foo");
+                asynctask.execute("get");
             }
         });
         postBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MyAsyncTask asynctask = new MyAsyncTask(main);
-                asynctask.execute("post", "hoge", "foo");
+                asynctask.execute("post");
             }
         });
         deleteBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MyAsyncTask asynctask = new MyAsyncTask(main);
-                asynctask.execute("delete", "hoge", "foo");
+                asynctask.execute("delete");
             }
         });
         flickrBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MyAsyncTask asynctask = new MyAsyncTask(main);
-                asynctask.execute("flickr", "hoge", "foo");
+                asynctask.execute("flickr");
             }
         });
     }
@@ -134,20 +138,20 @@ public class MainActivity extends Activity {
 
         HttpClient client = new DefaultHttpClient();
 
-        EditText et1 = (EditText) findViewById(R.id.editText1);
-        EditText et2 = (EditText) findViewById(R.id.editText2);
+        EditText codeTextBox = (EditText) findViewById(R.id.editText1);
+        EditText nameTextBox = (EditText) findViewById(R.id.editText2);
 
         //クエリを設定
         ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
-        list.add(new BasicNameValuePair("code", et1.getText().toString()));
-        list.add(new BasicNameValuePair("name", et2.getText().toString()));
+        list.add(new BasicNameValuePair("code", codeTextBox.getText().toString()));
+        list.add(new BasicNameValuePair("name", nameTextBox.getText().toString()));
 
         //Postを実行
         try {
             post.setEntity(new UrlEncodedFormEntity(list, "UTF-8"));
             HttpResponse response = client.execute(post);
         } catch (Exception e) {
-            Log.i("httppost", null, e);
+            Log.e(TAG, e.toString());
         }
     }
 
@@ -160,19 +164,18 @@ public class MainActivity extends Activity {
         try {
             HttpResponse response = client.execute(get);
             str = EntityUtils.toString(response.getEntity(), "UTF-8");
-            Log.d("HTTP", str);
-        } catch (Exception ex) {
-            System.out.println(ex);
-            Log.d("tag", "error");
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
         }
         return str;
     }
 
     //Deleteの処理
     private void httpDelete() {
-        //EditText et1 = (EditText)findViewById(R.id.editText1);
-        EditText et2 = (EditText) findViewById(R.id.editText2);
-        String url2 = "http://192.168.61.55:8080/test/database/?name=" + et2.getText().toString();
+        //EditText codeTextBox = (EditText)findViewById(R.id.editText1);
+        EditText nameTextBox = (EditText) findViewById(R.id.editText2);
+        String url2 = "http://192.168.61.55:8080/test/database/?name="
+                + nameTextBox.getText().toString();
         HttpDelete delete = new HttpDelete(url2);
         HttpClient client = new DefaultHttpClient();
 
@@ -181,7 +184,7 @@ public class MainActivity extends Activity {
         try {
             HttpResponse response = client.execute(delete);
         } catch (Exception e) {
-            Log.i("httpdelete", null, e);
+            Log.e(TAG, e.toString());
         }
     }
 
@@ -190,12 +193,12 @@ public class MainActivity extends Activity {
     //Flickrボタンの処理
     private void httpFlickr() {
         //フォームの入力値から取得する情報を決定
-        EditText et1 = (EditText) findViewById(R.id.editText1);
-        EditText et2 = (EditText) findViewById(R.id.editText2);
+        EditText codeTextBox = (EditText) findViewById(R.id.editText1);
+        EditText nameTextBox = (EditText) findViewById(R.id.editText2);
         String geturl = "https://api.flickr.com/services/rest/?method="
                 + "flickr.photos.search&api_key=3b95b3a46552591aaa157ed0a41b2eeb&tags="
-                + et2.getText().toString() + "&format=json&&nojsoncallback=1&per_page="
-                + et1.getText().toString();
+                + nameTextBox.getText().toString() + "&format=json&&nojsoncallback=1&per_page="
+                + codeTextBox.getText().toString();
         HttpGet get = new HttpGet(geturl);
         HttpClient client = new DefaultHttpClient();
         String str = "empty";
@@ -205,10 +208,8 @@ public class MainActivity extends Activity {
             str = EntityUtils.toString(response.getEntity());
             //余計な文字　"jsonFlickrApi("　と　")"　の削除が必要
             //str = str.substring(14, str.length()-1);
-            Log.d("HTTP", str);
-        } catch (Exception ex) {
-            System.out.println(ex);
-            Log.d("tag", "error");
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
         }
 
         //Jsonによって画像を取得
@@ -221,7 +222,6 @@ public class MainActivity extends Activity {
 
     //flickrからJsonによって画像を取得.
     private void httpFlickrByJson(String str) {
-        ArrayList<Bitmap> list = new ArrayList<Bitmap>();
         try {
             //JSONをパース
             JSONObject json = new JSONObject(str);
@@ -242,42 +242,37 @@ public class MainActivity extends Activity {
                 String photourl = "http://farm" + String.valueOf(farm) + ".staticflickr.com/"
                         + server + "/" + id + "_" + secret + ".jpg";
 
-                //生成URLから該当画像を取得しlistに追加[
+                //生成URLから該当画像を取得しlistに追加
                 Bitmap bmp = getBitmap(photourl);
-                bitmaps[i] = bmp;
-                list.add(bmp);
+                bitmapList.add(bmp);
             }
         } catch (JSONException e) {
-            Log.e("log_tag", "Error parsing data " + e.toString());
+            Log.e(TAG, e.toString());
         }
 
         //GridViewに挿入するAdapterを用意
-        adapter = new MyArrayAdapter(getApplicationContext(), R.layout.list_item, list);
+        adapter = new MyArrayAdapter(getApplicationContext(), R.layout.list_item, bitmapList);
     }
 
 
 
     //flickrからJacksonによって画像を取得.
     private void httpFlickrByJackson(String str) {
-        ArrayList<Bitmap> list = new ArrayList<Bitmap>();
         try {
-            //Jackson処理
             ObjectMapper mapper = new ObjectMapper();
             FlickrPhotoInfo flickrPhotoInfo = mapper.readValue(str, FlickrPhotoInfo.class);
-            //Jackson処理
-            for (int i = 0; i <  flickrPhotoInfo.getPhotos().getPhoto().size(); i++) {
-                //Jackson処理
-                String photourl = flickrPhotoInfo.getPhotos().getPhoto().get(i).getURL();
-                //生成URLから該当画像を取得しlistに追加[
+            List<Photo> photoList =  flickrPhotoInfo.getPhotos().getPhotoList();
+            for (Photo photo: photoList) {
+                String photourl = photo.getURL();
+                //生成URLから該当画像を取得しlistに追加
                 Bitmap bmp = getBitmap(photourl);
-                bitmaps[i] = bmp;
-                list.add(bmp);
+                bitmapList.add(bmp);
             }
         } catch (IOException e) {
-            Log.e("log_tag", "Error parsing data " + e.toString());
+            Log.e(TAG, e.toString());
         }
         //GridViewに挿入するAdapterを用意
-        adapter = new MyArrayAdapter(getApplicationContext(), R.layout.list_item, list);
+        adapter = new MyArrayAdapter(getApplicationContext(), R.layout.list_item, bitmapList);
     }
 
 
@@ -286,15 +281,25 @@ public class MainActivity extends Activity {
     //取得する画像のURLから画像データを取得.
     private Bitmap getBitmap(String photourl) {
         Bitmap bitmap = null;
+        InputStream in = null;
         try {
             HttpGet getpic = new HttpGet(photourl);
             HttpClient client = new DefaultHttpClient();
             HttpResponse response = client.execute(getpic);
-            InputStream in = response.getEntity().getContent();
+            in = response.getEntity().getContent();
             bitmap = BitmapFactory.decodeStream(in);
 
         } catch (IOException e) {
-            Log.e("TAG", "getResource：" + e.toString());
+            Log.e(TAG, e.toString());
+        } finally {
+            //必ずInputStreamを閉じる
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                Log.e(TAG, e.toString());
+            }
         }
         return bitmap;
     }
@@ -305,12 +310,9 @@ public class MainActivity extends Activity {
      * @param result 画面に表示する文字列
      */
     public void resultJob(String result) {
-        Log.e("RES", result);
-
         //結果を描画(UIは要メインスレッド)
         TextView tv = (TextView) findViewById(R.id.textView001);
         tv.setText(result);
-        Log.d("fin", result);
 
         //GridViewに描画
         GridView gridView = (GridView) findViewById(R.id.gridView001);
@@ -332,13 +334,13 @@ public class MainActivity extends Activity {
 
                 //②画像を渡すとき
 //                MySerializable serializable = new MySerializable();
-//                serializable.serializableBitmap = bitmaps[(int)id];
+//                serializable.serializableBitmap = bitmapList.get((int) id);
 //                intent.putExtra("serializablestring", serializable);
 
                 //③Applicationクラスを経由して画像を渡すとき
                 MyApplication app = (MyApplication) getApplication();
                 //画像をApplicationクラスに保存
-                app.setObj(bitmaps[(int) id]);
+                app.setBitmapSaved(bitmapList.get((int) id));
                 //ImageActivityに移動
                 startActivity(intent);
             }
@@ -364,7 +366,7 @@ public class MainActivity extends Activity {
             params.add(new BasicNameValuePair(objName, object.toString()));
             return params;
         } catch (Exception e) {
-            Log.i("json","error");
+            Log.e(TAG, e.toString());
             return null;
         }
     }

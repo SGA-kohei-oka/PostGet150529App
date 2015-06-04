@@ -19,7 +19,6 @@ public class FlickrPhotoInfo {
      * @return Photosオブジェクト
      */
     public  Photos getPhotos() {
-        Photos hoge = photos;
-        return hoge;
+        return photos;
     }
 }

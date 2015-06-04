@@ -16,36 +16,32 @@ public class MyAsyncTask extends AsyncTask<String, String, String> {
 
     private MainActivity main;
     private ImageActivity image;
-    private String hoge = "hoge";
+    private boolean imageFlag = false;
 
     /**
      * 非同期処理を開始.
-     * @param object 対象のアクティビティ
+     * @param nowActivity 対象のアクティビティ
      */
-    public MyAsyncTask(Object object) {
-        if (object.getClass().getSimpleName().equals("MainActivity")) {
-            this.main = (MainActivity) object;
-        } else if (object.getClass().getSimpleName().equals("ImageActivity")) {
-            this.image = (ImageActivity) object;
-            hoge = "Image done.";
+    public MyAsyncTask(Object nowActivity) {
+        if (nowActivity instanceof MainActivity) {
+            this.main = (MainActivity) nowActivity;
+        } else if (nowActivity instanceof ImageActivity) {
+            this.image = (ImageActivity) nowActivity;
+            imageFlag = true;
         }
     }
 
 
-//    public MyAsyncTask(ImageActivity ia) {
-//        this.image = ia;
-//    }
-
     @Override       //別スレッドで行う処理
     protected String doInBackground(String...value) {
 
-        String  arg1 = value[0]; //executeで渡される"hoge"
-        //String  arg2 = value[1]; //executeで渡される"foo"
-        //String  arg3 = value[2]; //executeで渡される"bar"
+        String  arg1 = value[0]; //executeで渡されるHTTPメソッド名
+        //String  arg2 = value[1];
+        //String  arg3 = value[2];
 
         String result = "empty";
 
-        if (hoge.equals("Image done.")) {
+        if (imageFlag) {
             image.setBitmap();
         } else {
             result = main.methods(arg1);
@@ -64,15 +60,12 @@ public class MyAsyncTask extends AsyncTask<String, String, String> {
 
     @Override       //最後にメインスレッドで行う処理
     protected void onPostExecute(String result) {
-
         //UIの描画
-        if (hoge.equals("Image done.")) {
+        if (imageFlag) {
             image.resultJob();
         } else {
             main.resultJob(result);
         }
-
-
     }
 
 

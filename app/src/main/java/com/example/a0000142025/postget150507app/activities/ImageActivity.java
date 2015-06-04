@@ -12,12 +12,10 @@ import com.example.a0000142025.postget150507app.myclasses.MyAsyncTask;
 import com.example.a0000142025.postget150507app.R;
 
 
-
 /**
  * 画像を表示するアクティビティ.
  * */
 public class ImageActivity extends Activity {
-
 
     private Bitmap displayImage;
 
@@ -30,8 +28,7 @@ public class ImageActivity extends Activity {
 
         //別スレッドで非同期処理
         MyAsyncTask asynctask = new MyAsyncTask(ia);
-        asynctask.execute("image", "hoge", "foo");
-
+        asynctask.execute("image");
     }
 
     /**
@@ -52,7 +49,7 @@ public class ImageActivity extends Activity {
 
         //③Applicationクラスを経由して画像を受け取るとき
         MyApplication app = (MyApplication) getApplication();
-        displayImage = app.getObj();
+        displayImage = app.getBitmapSaved();
     }
 
 
