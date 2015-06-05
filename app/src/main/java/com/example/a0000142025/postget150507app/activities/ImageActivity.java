@@ -10,12 +10,13 @@ import android.widget.ImageView;
 import com.example.a0000142025.postget150507app.myclasses.MyApplication;
 import com.example.a0000142025.postget150507app.myclasses.MyAsyncTask;
 import com.example.a0000142025.postget150507app.R;
+import com.example.a0000142025.postget150507app.myclasses.MyInterface;
 
 
 /**
  * 画像を表示するアクティビティ.
  * */
-public class ImageActivity extends Activity {
+public class ImageActivity extends Activity implements MyInterface {
 
     private Bitmap displayImage;
 
@@ -24,17 +25,15 @@ public class ImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
-        final ImageActivity ia = this;
-
         //別スレッドで非同期処理
-        MyAsyncTask asynctask = new MyAsyncTask(ia);
+        MyAsyncTask asynctask = new MyAsyncTask();
         asynctask.execute("image");
     }
 
     /**
      * 保存している画像を呼び出す.
      * */
-    public void setBitmap() {
+    public String methods(String str) {
 
         //①URLを受け取るとき
 //        Intent intent = getIntent();
@@ -50,6 +49,8 @@ public class ImageActivity extends Activity {
         //③Applicationクラスを経由して画像を受け取るとき
         MyApplication app = (MyApplication) getApplication();
         displayImage = app.getBitmapSaved();
+
+        return "empty";
     }
 
 
@@ -57,7 +58,7 @@ public class ImageActivity extends Activity {
     /**
      * 画像を表示する.
      * */
-    public void resultJob() {
+    public void resultJob(String str) {
         //画像表示
         ImageView iv = (ImageView) findViewById(R.id.imageView10);
         iv.setImageBitmap(displayImage);

@@ -28,11 +28,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.0'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.0'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.5.0'
-//    //Jacksonのjar追加
-//    compile files('jackson-annotations-2.5.0.jar')
-//    compile files('jackson-core-2.5.0.jar')
-//    compile files('jackson-databind-2.5.0.jar')
+//    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.0'
+//    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.0'
+//    compile 'com.fasterxml.jackson.core:jackson-core:2.5.0'
+    //Jacksonのjar追加
+    compile files('jackson-annotations-2.5.0.jar')
+    compile files('jackson-core-2.5.0.jar')
+    compile files('jackson-databind-2.5.0.jar')
 }

@@ -53,12 +53,13 @@ import com.example.a0000142025.postget150507app.myclasses.MyArrayAdapter;
 import com.example.a0000142025.postget150507app.myclasses.MyAsyncTask;
 import com.example.a0000142025.postget150507app.R;
 import com.example.a0000142025.postget150507app.jacksonclasses.FlickrPhotoInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.a0000142025.postget150507app.myclasses.MyInterface;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 最初のアクティビティ.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements MyInterface {
 
     private static final String TAG = "PostGetApp";
     private ArrayList<Bitmap> bitmapList = new ArrayList<Bitmap>();
@@ -77,31 +78,31 @@ public class MainActivity extends Activity {
 
 
         //final AsyncJob asynctask = new AsyncJob(this);
-        final MainActivity main = this;
+
 
         getBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // クリック時の処理
                 //別スレッドで非同期処理
-                MyAsyncTask asynctask = new MyAsyncTask(main);
+                MyAsyncTask asynctask = new MyAsyncTask();
                 asynctask.execute("get");
             }
         });
         postBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MyAsyncTask asynctask = new MyAsyncTask(main);
+                MyAsyncTask asynctask = new MyAsyncTask();
                 asynctask.execute("post");
             }
         });
         deleteBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MyAsyncTask asynctask = new MyAsyncTask(main);
+                MyAsyncTask asynctask = new MyAsyncTask();
                 asynctask.execute("delete");
             }
         });
         flickrBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MyAsyncTask asynctask = new MyAsyncTask(main);
+                MyAsyncTask asynctask = new MyAsyncTask();
                 asynctask.execute("flickr");
             }
         });
@@ -213,10 +214,10 @@ public class MainActivity extends Activity {
         }
 
         //Jsonによって画像を取得
-        //httpFlickrByJson(str);
+        httpFlickrByJson(str);
 
         //Jacksonによって画像を取得
-        httpFlickrByJackson(str);
+        //httpFlickrByJackson(str);
     }
 
 
@@ -255,6 +256,7 @@ public class MainActivity extends Activity {
     }
 
 
+/*
 
     //flickrからJacksonによって画像を取得.
     private void httpFlickrByJackson(String str) {
@@ -275,6 +277,7 @@ public class MainActivity extends Activity {
         adapter = new MyArrayAdapter(getApplicationContext(), R.layout.list_item, bitmapList);
     }
 
+*/
 
 
 
