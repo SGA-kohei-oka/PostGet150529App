@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements MyInterface {
         Button deleteBtn = (Button) findViewById(R.id.Button003);
         Button flickrBtn = (Button) findViewById(R.id.Button004);
 
-
+        final MainActivity main = this;
         //final AsyncJob asynctask = new AsyncJob(this);
 
 
@@ -84,25 +84,25 @@ public class MainActivity extends Activity implements MyInterface {
             public void onClick(View v) {
                 // クリック時の処理
                 //別スレッドで非同期処理
-                MyAsyncTask asynctask = new MyAsyncTask();
+                MyAsyncTask asynctask = new MyAsyncTask(main);
                 asynctask.execute("get");
             }
         });
         postBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MyAsyncTask asynctask = new MyAsyncTask();
+                MyAsyncTask asynctask = new MyAsyncTask(main);
                 asynctask.execute("post");
             }
         });
         deleteBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MyAsyncTask asynctask = new MyAsyncTask();
+                MyAsyncTask asynctask = new MyAsyncTask(main);
                 asynctask.execute("delete");
             }
         });
         flickrBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MyAsyncTask asynctask = new MyAsyncTask();
+                MyAsyncTask asynctask = new MyAsyncTask(main);
                 asynctask.execute("flickr");
             }
         });

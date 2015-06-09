@@ -15,18 +15,6 @@ public class MyApplication extends Application {
     private static final String TAG = "PostGetApp";
     private Bitmap bitmapSaved;
 
-    @Override
-    public void onCreate() {
-        //Application作成時
-        Log.v(TAG, "--- onCreate() in ---");
-    }
-
-    @Override
-    public void onTerminate() {
-        //Application終了時
-        Log.v(TAG, "--- onTerminate() in ---");
-    }
-
     /**
      * 押下した画像を保存.
      * @param bmp 押下した画像データ

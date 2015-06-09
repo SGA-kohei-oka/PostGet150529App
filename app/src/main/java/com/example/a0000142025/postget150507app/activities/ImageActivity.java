@@ -26,12 +26,14 @@ public class ImageActivity extends Activity implements MyInterface {
         setContentView(R.layout.activity_image);
 
         //別スレッドで非同期処理
-        MyAsyncTask asynctask = new MyAsyncTask();
+        MyAsyncTask asynctask = new MyAsyncTask(this);
         asynctask.execute("image");
     }
 
     /**
      * 保存している画像を呼び出す.
+     * @param str ダミー
+     * @return empty
      * */
     public String methods(String str) {
 
@@ -57,6 +59,7 @@ public class ImageActivity extends Activity implements MyInterface {
 
     /**
      * 画像を表示する.
+     * @param str ダミー
      * */
     public void resultJob(String str) {
         //画像表示
